@@ -1,0 +1,28 @@
+body {
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  margin: 20px;
+  cursor: pointer;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+button:hover { transform: scale(1.1); }
+
+#animationDiv img { width: 200px; transition: transform 0.5s; }
+#animationDiv img:hover { transform: rotate(15deg); }
+
+#confettiDiv img { width: 300px; }
