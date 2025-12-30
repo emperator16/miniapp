@@ -1,51 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Mystery Rewards Mini App</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Mystery Box</title>
 
-<!-- TonConnect SDK صحیح -->
-<script src="https://unpkg.com/@tonconnect/sdk@0.15.4/dist/tonconnect-sdk.min.js"></script>
+  <!-- Telegram WebApp -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- TON Connect UI (CDN) -->
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id="app">
-  <h1>Mystery Rewards</h1>
 
-  <div id="connectDiv">
-    <button id="connectBtn">Connect Wallet</button>
-    <p>Connect your wallet to claim your rewards safely</p>
-  </div>
+  <h2>🎁 Mystery Box</h2>
 
-  <div id="gameDiv" style="display:none;">
-    <div id="animationDiv">
-      <img src="images/mystery-box.png" alt="Mystery Box">
-    </div>
-    <button id="playBtn">Play Game</button>
-  </div>
+  <button id="connect">Connect Wallet</button>
 
-  <div id="rewardDiv" style="display:none;">
-    <h2>You won <span id="rewardAmount">3.5</span> TON!</h2>
-    <p id="timer">15:00</p>
-    <button id="claimBtn">Claim Reward</button>
-    <div id="confettiDiv" style="display:none;">
-      <img src="images/confetti.gif" alt="Confetti">
-    </div>
-  </div>
-
-  <div id="claimDiv" style="display:none;">
-    <p>Confirmation required</p>
-  </div>
-
-  <div id="successDiv" style="display:none;">
-    <p>Reward secured, back to game!</p>
-    <button id="playAgainBtn">Play Again</button>
-  </div>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
-
-
