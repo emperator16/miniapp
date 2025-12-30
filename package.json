@@ -1,0 +1,13 @@
+{
+  "name": "telegram-miniapp",
+  "private": true,
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@tonconnect/ui": "^0.0.38"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
