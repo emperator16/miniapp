@@ -7,7 +7,7 @@ let currentIndex = 0;
 document.getElementById("connectBtn").onclick = async () => {
     try {
         connector = new TonConnectSDK.TonConnect({
-            manifestUrl: "https://YOURDOMAIN.pages.dev/tonconnect-manifest.json"
+            manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
         });
 
         const wallet = await connector.connect();
@@ -109,3 +109,4 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
+
