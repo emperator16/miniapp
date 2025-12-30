@@ -1,8 +1,8 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0f0f;
-  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,59 +10,84 @@ body {
 }
 
 .app {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
   text-align: center;
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
 }
 
-.logo {
-  width: 90px;
-  margin-bottom: 12px;
+header .logo {
+  width: 100px;
+  margin-bottom: 10px;
 }
 
-h1 {
-  font-size: 22px;
+header h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
   margin-bottom: 20px;
 }
 
 .popup {
-  background: #1a1a1a;
-  border-radius: 14px;
-  padding: 18px;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
   margin-bottom: 20px;
 }
 
+.popup.hidden {
+  display: none;
+}
+
 .popup button {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
+  padding: 12px 20px;
+  font-size: 1rem;
   font-weight: bold;
-  border-radius: 10px;
   border: none;
-  background: #ffc107;
+  border-radius: 10px;
+  background: linear-gradient(90deg,#ff9800,#ffd700);
   color: #000;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.popup button:hover {
+  transform: scale(1.05);
 }
 
 .boxes {
   display: flex;
-  gap: 12px;
-  margin-top: 20px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .box {
   flex: 1;
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.box.active {
-  opacity: 1;
-  pointer-events: auto;
+  filter: blur(4px);
+  cursor: not-allowed;
+  transition: all 0.3s;
 }
 
 .box img {
   width: 100%;
   border-radius: 10px;
+}
+
+.box.active {
+  filter: blur(0);
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+#reward-popup {
+  background: rgba(30,30,30,0.95);
+}
+
+#timer {
+  font-family: 'Digital-7', monospace;
+  font-size: 2rem;
+  margin: 10px 0;
+  font-weight: bold;
 }
