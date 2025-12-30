@@ -8,7 +8,7 @@ let currentIndex = 0;
 document.getElementById("connectBtn").onclick = () => {
     try {
         ui = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
+            manifestUrl: "https://emperator16.github.io/miniapp/manifest.json"
         });
 
         // event listener برای وضعیت اتصال
@@ -122,4 +122,5 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
+
 
