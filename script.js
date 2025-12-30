@@ -11,8 +11,6 @@ document.getElementById("connectBtn").onclick = () => {
             manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
         });
 
-        ui.show(); // نمایش modal Wallet popup
-
         // event listener برای وضعیت اتصال
         ui.onStatusChange((status) => {
             if (status.type === 'connected') {
@@ -124,3 +122,4 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
+
