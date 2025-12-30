@@ -30,6 +30,9 @@ jobs:
 
       - name: Copy manifest to dist
         run: cp tonconnect-manifest.json dist/
+      
+      - name: Copy images to dist
+        run: cp -r images dist/
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
