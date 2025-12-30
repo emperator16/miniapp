@@ -5,7 +5,7 @@ let currentIndex = 0;
 
 // ---------- Initialize TonConnect ----------
 const connector = new TonConnectSDK.TonConnect({
-    manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
+    manifestUrl: "https://emperator16.github.io/miniapp/manifest.json"
 });
 
 // ---------- Connect Wallet ----------
@@ -134,3 +134,4 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
+
