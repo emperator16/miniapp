@@ -4,7 +4,7 @@ const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) tg.expand();
 
 const tonConnectUI = new TonConnectUI({
-  manifestUrl: '/tonconnect-manifest.json'
+  manifestUrl: 'https://emperator16.github.io/miniapp/tonconnect-manifest.json'
 });
 
 // عناصر
