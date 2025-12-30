@@ -28,6 +28,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Copy manifest to dist
+        run: cp tonconnect-manifest.json dist/
+
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
