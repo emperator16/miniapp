@@ -4,23 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mystery Box</title>
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./style.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="app">
-    <img src="/miniapp/images/logo.png" class="logo" />
-    <h1>Mystery Box</h1>
+    <header>
+      <img src="/miniapp/images/logo.png" alt="Logo" class="logo">
+      <h1>🎁 Mystery Box</h1>
+    </header>
 
     <div id="wallet-popup" class="popup">
-      <p>Connect your wallet to unlock your mystery boxes.</p>
+      <p>🎁 Connect Your Wallet to Unlock the Mystery Boxes!<br>
+      Your rewards are waiting — secure them now.<br>
+      Only a tiny network fee is required.<br>
+      Don’t miss out, the mystery won’t last forever!</p>
       <button id="connect">Connect Wallet</button>
     </div>
 
     <div class="boxes">
-      <div class="box"><img src="/miniapp/images/box.png"></div>
-      <div class="box"><img src="/miniapp/images/box.png"></div>
-      <div class="box"><img src="/miniapp/images/box.png"></div>
+      <div class="box" data-id="1"><img src="/miniapp/images/box.png" alt="Box"></div>
+      <div class="box" data-id="2"><img src="/miniapp/images/box.png" alt="Box"></div>
+      <div class="box" data-id="3"><img src="/miniapp/images/box.png" alt="Box"></div>
+    </div>
+
+    <div id="reward-popup" class="popup hidden">
+      <p id="reward-text"></p>
+      <p id="timer">15:00</p>
+      <button id="claim">Claim Reward</button>
     </div>
   </div>
 
