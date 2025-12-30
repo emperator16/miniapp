@@ -1,5 +1,7 @@
 {
+  "name": "Telegram Mystery Box",
   "url": "https://emperator16.github.io/miniapp",
-  "name": "TON Mystery Box",
-  "iconUrl": "https://emperator16.github.io/miniapp/images/logo.png"
+  "iconUrl": "https://emperator16.github.io/miniapp/images/logo.png",
+  "termsOfUseUrl": "https://emperator16.github.io/miniapp/",
+  "privacyPolicyUrl": "https://emperator16.github.io/miniapp/"
 }
