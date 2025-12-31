@@ -29,7 +29,7 @@ header h1 {
 
 .top-banner {
   width: 100%;
-  height: 190px;
+  height: 210px;
   border-radius: 20px;
   margin-bottom: 20px;
 
@@ -116,5 +116,6 @@ header h1 {
   margin: 10px 0;
   font-weight: bold;
 }
+
 
 
