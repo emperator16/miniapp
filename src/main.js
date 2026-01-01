@@ -70,6 +70,14 @@ boxes.forEach(box => {
     }, 1000);
   });
 });
+setInterval(() => {
+  const list = document.querySelector('.activity-list');
+  if (!list) return;
+
+  const first = list.firstElementChild;
+  list.appendChild(first.cloneNode(true));
+  first.remove();
+}, 5000);
 
 // Claim Reward (placeholder – بعداً تراکنش واقعی)
 claimBtn.onclick = () => {
