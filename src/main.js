@@ -10,9 +10,18 @@ const tonConnectUI = new TonConnectUI({
 const connectBtn = document.getElementById('connect-btn');
 const boxes = document.querySelectorAll('.box');
 
-connectBtn.onclick = async () => {
-  await tonConnectUI.connectWallet();
+/* 🔑 این خط خیلی مهم است */
+tonConnectUI.uiOptions = {
+  language: 'en'
 };
+
+connectBtn.addEventListener('click', async () => {
+  try {
+    await tonConnectUI.openModal();
+  } catch (e) {
+    console.error('TonConnect error:', e);
+  }
+});
 
 tonConnectUI.onStatusChange(wallet => {
   if (!wallet) return;
