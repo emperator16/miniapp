@@ -41,22 +41,20 @@
       <small>No transaction required</small>
     </div>
 
-    <!-- BOXES -->
-<div class="slots">
-  <div class="slot" data-id="1">
-    <span class="slot-label">Slot #01</span>
-    <span class="slot-type">TON Reward</span>
-    <span class="slot-status">Locked</span>
-  </div>
-  <div class="slot" data-id="2">
-    <span class="slot-label">Slot #02</span>
-    <span class="slot-type">TON Reward</span>
-    <span class="slot-status">Locked</span>
-  </div>
-  <div class="slot" data-id="3">
-    <span class="slot-label">Slot #03</span>
-    <span class="slot-type">TON Reward</span>
-    <span class="slot-status">Locked</span>
+<!-- FEATURED REWARD -->
+<div class="featured-slot locked" id="featured-slot">
+  <div class="slot-inner">
+    <div class="slot-front">
+      <span class="pulse-ring"></span>
+      <span class="slot-title">Mystery Vault</span>
+      <span class="slot-sub">Tap to reveal reward</span>
+    </div>
+
+    <div class="slot-back">
+      <span class="reward-icon" id="reward-icon">💎</span>
+      <span class="reward-text" id="reward-text">+10 TON</span>
+      <span class="reward-sub">Reward Unlocked</span>
+    </div>
   </div>
 </div>
 
@@ -82,5 +80,6 @@
   <script type="module" src="./main.js"></script>
 </body>
 </html>
+
 
 
