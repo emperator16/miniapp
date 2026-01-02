@@ -38,9 +38,9 @@ function setDisconnectedState() {
     disconnectBtn.classList.add('hidden');
   }
 
-  for (var i = 0; i < boxes.length; i++) {
-    boxes[i].classList.remove('active');
-  }
+  for (var i = 0; i < slots.length; i++) {
+  slots[i].classList.remove('active');
+}
 }
 
 function setConnectedState() {
@@ -51,9 +51,9 @@ function setConnectedState() {
     disconnectBtn.classList.remove('hidden');
   }
 
-  for (var i = 0; i < boxes.length; i++) {
-    boxes[i].classList.add('active');
-  }
+  for (var i = 0; i < slots.length; i++) {
+  slots[i].classList.add('active');
+}
 }
 
 /* ===============================
@@ -110,3 +110,12 @@ tonConnectUI.onStatusChange(function (wallet) {
 
   setConnectedState();
 });
+
+for (var i = 0; i < slots.length; i++) {
+  slots[i].addEventListener('click', function () {
+    if (!this.classList.contains('active')) return;
+
+    this.querySelector('.slot-status').textContent = 'Revealed';
+  });
+}
+
