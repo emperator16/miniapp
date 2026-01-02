@@ -1,15 +1,18 @@
 import { TonConnectUI } from '@tonconnect/ui';
 
 /* ===============================
-   Telegram WebApp
+   Telegram WebApp (safe)
 ================================ */
-const tg = window.Telegram?.WebApp;
-tg?.expand();
+var tg = null;
+if (window.Telegram && window.Telegram.WebApp) {
+  tg = window.Telegram.WebApp;
+  tg.expand();
+}
 
 /* ===============================
    TonConnect Init
 ================================ */
-const tonConnectUI = new TonConnectUI({
+var tonConnectUI = new TonConnectUI({
   manifestUrl: 'https://emperator16.github.io/miniapp/tonconnect-manifest.json'
 });
 
@@ -20,35 +23,90 @@ tonConnectUI.uiOptions = {
 /* ===============================
    DOM Elements
 ================================ */
-const connectBtn = document.getElementById('connect-btn');
-const disconnectBtn = document.getElementById('disconnect-btn'); // اگر نداری پایین توضیح دادم
-const boxes = document.querySelectorAll('.box');
+var connectBtn = document.getElementById('connect-btn');
+var disconnectBtn = document.getElementById('disconnect-btn');
+var boxes = document.querySelectorAll('.box');
 
 /* ===============================
-   Helpers
+   UI State Helpers
 ================================ */
 function setDisconnectedState() {
   connectBtn.textContent = 'Connect TON Wallet';
   connectBtn.disabled = false;
-  disconnectBtn?.classList.add('hidden');
-  boxes.forEach(b => b.classList.remove('active'));
+
+  if (disconnectBtn) {
+    disconnectBtn.classList.add('hidden');
+  }
+
+  for (var i = 0; i < boxes.length; i++) {
+    boxes[i].classList.remove('active');
+  }
 }
 
 function setConnectedState() {
   connectBtn.textContent = 'Wallet Connected';
   connectBtn.disabled = true;
-  disconnectBtn?.classList.remove('hidden');
-  boxes.forEach(b => b.classList.add('active'));
+
+  if (disconnectBtn) {
+    disconnectBtn.classList.remove('hidden');
+  }
+
+  for (var i = 0; i < boxes.length; i++) {
+    boxes[i].classList.add('active');
+  }
 }
 
 /* ===============================
-   Force sync on page load
-   (حل باگ cache / session موبایل)
+   Force Sync On Load
+   (حل مشکل cache موبایل)
 ================================ */
-(async () => {
-  try {
-    const wallet = tonConnectUI.wallet;
+try {
+  var wallet = tonConnectUI.wallet;
 
-    if (!wallet || !wallet.account) {
-      await tonConnectUI.disconnect(); // پاک‌کردن session فاسد
+  if (!wallet || !wallet.account) {
+    tonConnectUI.disconnect();
+    setDisconnectedState();
+  } else {
+    setConnectedState();
+  }
+} catch (e) {
+  console.warn('TonConnect sync warning', e);
+  setDisconnectedState();
+}
+
+/* ===============================
+   Connect Button
+================================ */
+connectBtn.addEventListener('click', function () {
+  try {
+    tonConnectUI.openModal();
+  } catch (e) {
+    console.error('TonConnect openModal error', e);
+  }
+});
+
+/* ===============================
+   Disconnect Button
+================================ */
+if (disconnectBtn) {
+  disconnectBtn.addEventListener('click', function () {
+    try {
+      tonConnectUI.disconnect();
       setDisconnectedState();
+    } catch (e) {
+      console.error('Disconnect error', e);
+    }
+  });
+}
+
+/* ===============================
+   Wallet Status Listener
+================================ */
+tonConnectUI.onStatusChange(function (wallet) {
+  if (!wallet || !wallet.account) {
+    setDisconnectedState();
+    return;
+  }
+
+  setConnectedState();
+});
