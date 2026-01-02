@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mystery Box</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TON Mystery Rewards</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="./style.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -12,49 +17,49 @@
 <body>
   <div class="app">
 
-    <header class="top-banner">
-      <div class="logo-wrap"></div>
+    <!-- HERO -->
+    <header class="hero">
+      <span class="badge">LIVE REWARDS</span>
+      <h1>Unlock TON Mystery Boxes</h1>
+      <p class="subtitle">
+        Connect your wallet to reveal on-chain rewards.<br>
+        No approvals · No custody · TON native
+      </p>
     </header>
 
-    <div class="trust-strip">
-      Non-custodial · On-chain verification · Powered by TON
+    <!-- TRUST -->
+    <div class="trust-row">
+      <span>🔒 Read-only wallet connection</span>
+      <span>⚡ Instant on-chain verification</span>
+      <span>🧪 Public test phase</span>
     </div>
 
-    <!-- WALLET POPUP -->
-    <div id="wallet-popup" class="popup">
-      <p>
-        🎁 Connect your wallet to unlock the mystery boxes.<br>
-        Rewards are on-chain and claimable instantly.<br>
-        Only a small network fee applies.
-      </p>
- <tonconnect-button></tonconnect-button>
+    <!-- CONNECT -->
+    <div id="wallet-card" class="card">
+      <button id="connect-btn">Connect TON Wallet</button>
+      <small>No transaction required</small>
     </div>
 
     <!-- BOXES -->
     <div class="boxes">
-      <div class="box" data-id="1">
-        <img src="/miniapp/images/box.png" alt="Box">
-      </div>
-      <div class="box" data-id="2">
-        <img src="/miniapp/images/box.png" alt="Box">
-      </div>
-      <div class="box" data-id="3">
-        <img src="/miniapp/images/box.png" alt="Box">
-      </div>
+      <div class="box" data-id="1"><img src="/miniapp/images/box.png"></div>
+      <div class="box" data-id="2"><img src="/miniapp/images/box.png"></div>
+      <div class="box" data-id="3"><img src="/miniapp/images/box.png"></div>
     </div>
 
     <!-- ACTIVITY -->
-<section class="activity">
-  <div class="activity-header">Recent On-Chain Activity</div>
-  <ul class="activity-list"></ul>
-
-  <small class="activity-note">Preview of recent activity</small>
-</section>
+    <section class="activity">
+      <div class="activity-header">
+        🔴 Live Reward Stream
+      </div>
+      <ul class="activity-list"></ul>
+      <small>Updated in real time</small>
+    </section>
 
     <!-- REWARD -->
-    <div id="reward-popup" class="popup hidden">
-      <p id="reward-text"></p>
-      <p id="timer">15:00</p>
+    <div id="reward-popup" class="reward hidden">
+      <h3 id="reward-text"></h3>
+      <div id="timer"></div>
       <button id="claim">Claim Reward</button>
     </div>
 
@@ -63,8 +68,3 @@
   <script type="module" src="./main.js"></script>
 </body>
 </html>
-
-
-
-
-
