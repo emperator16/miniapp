@@ -28,18 +28,43 @@
     </header>
 
     <!-- TRUST -->
-    <div class="trust-row">
-      <span>🔒 Read-only wallet connection</span>
-      <span>⚡ Instant on-chain verification</span>
-      <span>🧪 Public test phase</span>
+<div class="trust-row">
+  <span>🔒 Read-only wallet connection</span>
+  <span>⚡ Instant on-chain verification</span>
+  <span>📊 Transparent reward history</span>
+</div>
+
+
+<!-- WALLET -->
+<div id="wallet-card" class="card">
+
+  <!-- DISCONNECTED -->
+  <div id="wallet-disconnected">
+    <p class="wallet-desc">
+      Connect your wallet to reveal on-chain rewards.<br>
+      <span>No approvals · No custody · TON native</span>
+    </p>
+    <button id="connect-btn">Connect TON Wallet</button>
+  </div>
+
+  <!-- CONNECTED -->
+  <div id="wallet-connected" class="hidden">
+    <div class="wallet-info">
+      <span class="wallet-label">Connected wallet</span>
+      <span id="wallet-address" class="wallet-address"></span>
     </div>
 
-    <!-- CONNECT -->
-    <div id="wallet-card" class="card">
-      <button id="connect-btn">Connect TON Wallet</button>
-      <button id="disconnect-btn" class="ghost hidden">Disconnect</button>
-      <small>No transaction required</small>
+    <div class="wallet-rewards">
+      <span class="reward-title">My Rewards</span>
+      <ul id="my-rewards">
+        <!-- JS fills -->
+      </ul>
     </div>
+
+    <button id="disconnect-btn" class="ghost">Disconnect</button>
+  </div>
+
+</div>
 
 <!-- FEATURED REWARD -->
 <div class="featured-slot locked" id="featured-slot">
@@ -80,6 +105,7 @@
   <script type="module" src="./main.js"></script>
 </body>
 </html>
+
 
 
 
