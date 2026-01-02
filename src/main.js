@@ -43,11 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
     w?.account ? setConnected() : setDisconnected()
   );
 
-  connectBtn.onclick = () => tonConnectUI.openModal();
-  disconnectBtn?.onclick = () => {
+  connectBtn.onclick = () => {
+  tonConnectUI.openModal();
+};
+
+if (disconnectBtn) {
+  disconnectBtn.onclick = () => {
     tonConnectUI.disconnect();
     setDisconnected();
   };
+}
 
   /* Featured Slot Logic */
   const rewards = [
