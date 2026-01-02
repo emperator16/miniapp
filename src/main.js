@@ -1,124 +1,102 @@
 import { TonConnectUI } from '@tonconnect/ui';
 
-/* ===============================
-   Run AFTER DOM is ready
-================================ */
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ===============================
-     Telegram WebApp (safe)
-  ================================ */
+  /* Telegram */
   const tg = window.Telegram?.WebApp;
   tg?.expand();
 
-  /* ===============================
-     TonConnect Init
-  ================================ */
+  /* TonConnect */
   const tonConnectUI = new TonConnectUI({
     manifestUrl: 'https://emperator16.github.io/miniapp/tonconnect-manifest.json'
   });
 
-  tonConnectUI.uiOptions = {
-    language: 'en'
-  };
+  tonConnectUI.uiOptions = { language: 'en' };
 
-  /* ===============================
-     DOM Elements
-  ================================ */
+  /* DOM */
   const connectBtn = document.getElementById('connect-btn');
   const disconnectBtn = document.getElementById('disconnect-btn');
-  const slots = document.querySelectorAll('.slot');
+  const featuredSlot = document.getElementById('featured-slot');
+  const rewardText = document.getElementById('reward-text');
+  const rewardIcon = document.getElementById('reward-icon');
+  const activityList = document.querySelector('.activity-list');
 
-  if (!connectBtn) {
-    console.error('Connect button not found');
-    return;
-  }
-
-  /* ===============================
-     UI States
-  ================================ */
-  function setDisconnectedState() {
+  /* UI State */
+  function setDisconnected() {
     connectBtn.textContent = 'Connect TON Wallet';
     connectBtn.disabled = false;
-
     disconnectBtn?.classList.add('hidden');
-
-    slots.forEach(slot => {
-      slot.classList.remove('active');
-      slot.querySelector('.slot-status').textContent = 'Locked';
-    });
+    featuredSlot.classList.remove('active', 'revealed');
   }
 
-  function setConnectedState() {
+  function setConnected() {
     connectBtn.textContent = 'Wallet Connected';
     connectBtn.disabled = true;
-
     disconnectBtn?.classList.remove('hidden');
-
-    slots.forEach(slot => {
-      slot.classList.add('active');
-      slot.querySelector('.slot-status').textContent = 'Ready';
-    });
+    featuredSlot.classList.add('active');
   }
 
-  /* ===============================
-     Initial Wallet Sync
-     (NO force disconnect)
-  ================================ */
-  if (tonConnectUI.wallet?.account) {
-    setConnectedState();
-  } else {
-    setDisconnectedState();
+  if (tonConnectUI.wallet?.account) setConnected();
+  else setDisconnected();
+
+  tonConnectUI.onStatusChange(w =>
+    w?.account ? setConnected() : setDisconnected()
+  );
+
+  connectBtn.onclick = () => tonConnectUI.openModal();
+  disconnectBtn?.onclick = () => {
+    tonConnectUI.disconnect();
+    setDisconnected();
+  };
+
+  /* Featured Slot Logic */
+  const rewards = [
+    { text: '+5 TON', icon: '💎' },
+    { text: '+12 TON', icon: '💎' },
+    { text: '+28 TON', icon: '💎' },
+    { text: 'Rare NFT', icon: '🎨' },
+    { text: 'Epic NFT', icon: '🎨' }
+  ];
+
+  featuredSlot.addEventListener('click', () => {
+    if (!featuredSlot.classList.contains('active') ||
+        featuredSlot.classList.contains('revealed')) return;
+
+    const reward = rewards[Math.floor(Math.random() * rewards.length)];
+    rewardText.textContent = reward.text;
+    rewardIcon.textContent = reward.icon;
+    featuredSlot.classList.add('revealed');
+  });
+
+  /* 🔴 Live Reward Stream */
+  const rewardPool = [
+    { label: '💎 +3 TON', color: '#4da6ff' },
+    { label: '💎 +15 TON', color: '#4da6ff' },
+    { label: '🎨 Rare NFT', color: '#b084ff' },
+    { label: '🎨 Epic NFT', color: '#ff7ad9' }
+  ];
+
+  const wallets = Array.from({ length: 30 }, (_, i) =>
+    `EQ${i}…${Math.random().toString(36).slice(5,9)}`
+  );
+
+  function addActivity() {
+    const li = document.createElement('li');
+    const r = rewardPool[Math.floor(Math.random() * rewardPool.length)];
+    const w = wallets[Math.floor(Math.random() * wallets.length)];
+
+    li.innerHTML = `
+      <span>${w}</span>
+      <span style="color:${r.color};font-weight:700">${r.label}</span>
+    `;
+
+    if (activityList.children.length >= 5)
+      activityList.removeChild(activityList.firstChild);
+
+    activityList.appendChild(li);
   }
 
-  /* ===============================
-     Connect Button
-  ================================ */
-  connectBtn.addEventListener('click', async () => {
-    try {
-      await tonConnectUI.openModal();
-    } catch (e) {
-      console.error('TonConnect openModal error:', e);
-    }
-  });
-
-  /* ===============================
-     Disconnect Button
-  ================================ */
-  disconnectBtn?.addEventListener('click', async () => {
-    try {
-      await tonConnectUI.disconnect();
-      setDisconnectedState();
-    } catch (e) {
-      console.error('Disconnect error:', e);
-    }
-  });
-
-  /* ===============================
-     Wallet Status Listener
-  ================================ */
-  tonConnectUI.onStatusChange(wallet => {
-    if (!wallet || !wallet.account) {
-      setDisconnectedState();
-      return;
-    }
-    setConnectedState();
-  });
-
-  /* ===============================
-     Slot Interaction
-  ================================ */
-  slots.forEach(slot => {
-    slot.addEventListener('click', () => {
-      if (!slot.classList.contains('active')) return;
-
-      const rewards = ['5 TON', '10 TON', '25 TON', 'NFT'];
-      const reward = rewards[Math.floor(Math.random() * rewards.length)];
-
-      slot.querySelector('.slot-type').textContent = reward;
-      slot.querySelector('.slot-status').textContent = 'Revealed';
-      slot.classList.add('opened');
-    });
-  });
+  for (let i = 0; i < 5; i++) addActivity();
+  setInterval(addActivity, 3200);
 
 });
