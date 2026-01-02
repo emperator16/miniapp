@@ -172,5 +172,60 @@ header h1 {
 }
 
 
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.activity-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: monospace;
+  font-size: 0.8rem;
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  animation: slideIn .35s ease-out;
+}
+
+.activity-list li:last-child {
+  border-bottom: none;
+}
+
+.activity-list .addr {
+  opacity: 0.85;
+}
+
+.activity-list .amount {
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.activity-list .nft {
+  color: #7df9ff;
+  font-weight: 600;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activity-note {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.65rem;
+  opacity: 0.4;
+  text-align: center;
+}
+
 
 
