@@ -58,6 +58,8 @@ if (disconnectBtn) {
   const rewards = [
     { text: '+5 TON', icon: '💎' },
     { text: '+12 TON', icon: '💎' },
+    { text: '+55 TON', icon: '💎' },
+    { text: '+112 TON', icon: '💎' },
     { text: '+28 TON', icon: '💎' },
     { text: 'Rare NFT', icon: '🎨' },
     { text: 'Epic NFT', icon: '🎨' }
@@ -75,10 +77,15 @@ if (disconnectBtn) {
 
   /* 🔴 Live Reward Stream */
   const rewardPool = [
+    { label: '💎 +35 TON', color: '#4da6ff' },
     { label: '💎 +3 TON', color: '#4da6ff' },
+    { label: '💎 +7 TON', color: '#4da6ff' },
     { label: '💎 +15 TON', color: '#4da6ff' },
+    { label: '💎 +32 TON', color: '#4da6ff' },
     { label: '🎨 Rare NFT', color: '#b084ff' },
-    { label: '🎨 Epic NFT', color: '#ff7ad9' }
+    { label: '🎨 Epic NFT', color: '#ff7ad9' },
+    { label: '🎨 Genesis NFT', color: '#ffd36b' },
+    { label: '🎨 Legendary NFT', color: '#ff6b6b' }
   ];
 
   const wallets = Array.from({ length: 30 }, (_, i) =>
