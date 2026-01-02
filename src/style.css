@@ -79,31 +79,6 @@ body {
   color: #000;
 }
 
-/* BOXES */
-.boxes {
-  display: flex;
-  gap: 12px;
-  margin: 22px 0;
-}
-
-.box {
-  flex: 1;
-  filter: grayscale(1) blur(3px);
-  opacity: 0.5;
-  transition: all .3s;
-}
-
-.box.active {
-  filter: none;
-  opacity: 1;
-  cursor: pointer;
-  transform: scale(1.05);
-}
-
-.box img {
-  width: 100%;
-}
-
 /* ACTIVITY */
 .activity {
   background: rgba(255,255,255,0.04);
@@ -217,4 +192,93 @@ body {
 .slot.active .slot-status {
   color: #6bffd6;
   opacity: 1;
+}
+
+/* =========================
+   Featured Lucky Slot
+========================= */
+
+.featured-slot {
+  margin: 26px 0;
+  height: 180px;
+  perspective: 1200px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.featured-slot.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.slot-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(.25,.8,.25,1);
+}
+
+.featured-slot.revealed .slot-inner {
+  transform: rotateY(180deg) scale(1.03);
+}
+
+.slot-front,
+.slot-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.slot-back {
+  transform: rotateY(180deg);
+}
+
+.slot-title {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.slot-sub {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-top: 6px;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,255,200,0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(.9); opacity:.7 }
+  70% { transform: scale(1.2); opacity:0 }
+  100% { opacity:0 }
+}
+
+.reward-icon {
+  font-size: 2.4rem;
+}
+
+.reward-text {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-top: 8px;
+}
+
+.reward-sub {
+  font-size: 0.7rem;
+  opacity: 0.6;
 }
