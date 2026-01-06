@@ -82,15 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* Fake but believable reward history (local only) */
-    if (myRewardsEl) {
-      myRewardsEl.innerHTML = '';
-      ['+5 TON', '+12 TON', 'Rare NFT'].forEach(r => {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${r}</span><span>✔</span>`;
-        myRewardsEl.appendChild(li);
-      });
-    }
-  }
+if (myRewardsEl) {
+  myRewardsEl.innerHTML = `
+    <li class="empty-rewards">
+      No rewards yet<br>
+      <span>Reveal your first reward from the Mystery Vault</span>
+    </li>
+  `;
+}
 
   /* ===============================
      Initial Sync
