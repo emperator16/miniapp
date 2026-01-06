@@ -141,9 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
     { label: '+3 TON', type: 'ton' },
     { label: '+7 TON', type: 'ton' },
     { label: '+15 TON', type: 'ton' },
+    { label: '+10 TON', type: 'ton' },
     { label: '+32 TON', type: 'ton' },
     { label: 'NFT Reward', type: 'nft' },
-    { label: 'Rare NFT', type: 'nft-rare' }
+    { label: 'NFT Reward', type: 'nft' }
   ];
 
   const wallets = Array.from({ length: 30 }, (_, i) =>
