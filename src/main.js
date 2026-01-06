@@ -5,10 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ===============================
      Telegram WebApp
   ================================ */
-  const tg =
-    window.Telegram && window.Telegram.WebApp
-      ? window.Telegram.WebApp
-      : null;
+  const tg = window.Telegram?.WebApp || null;
   if (tg) tg.expand();
 
   /* ===============================
@@ -17,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const tonConnectUI = new TonConnectUI({
     manifestUrl: 'https://emperator16.github.io/miniapp/tonconnect-manifest.json'
   });
-
   tonConnectUI.uiOptions = { language: 'en' };
 
   /* ===============================
@@ -29,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const walletDisconnected = document.getElementById('wallet-disconnected');
   const walletConnected = document.getElementById('wallet-connected');
   const walletAddressEl = document.getElementById('wallet-address');
+
+  const totalRewardsEl = document.getElementById('total-rewards');
+  const tonEarnedEl = document.getElementById('ton-earned');
+  const nftsEarnedEl = document.getElementById('nfts-earned');
   const myRewardsEl = document.getElementById('my-rewards');
 
   const featuredSlot = document.getElementById('featured-slot');
@@ -42,134 +42,108 @@ document.addEventListener('DOMContentLoaded', () => {
   ================================ */
   function shortAddress(addr) {
     if (!addr) return '';
-    return addr.slice(0, 4) + '…' + addr.slice(-4);
+    return addr.slice(0, 6) + '…' + addr.slice(-4);
   }
 
   /* ===============================
      UI States
   ================================ */
   function setDisconnected() {
-    if (walletDisconnected) walletDisconnected.classList.remove('hidden');
-    if (walletConnected) walletConnected.classList.add('hidden');
+    walletDisconnected?.classList.remove('hidden');
+    walletConnected?.classList.add('hidden');
 
-    if (connectBtn) {
-      connectBtn.disabled = false;
-      connectBtn.textContent = 'Connect TON Wallet';
-    }
+    connectBtn && (connectBtn.disabled = false);
 
-    if (featuredSlot) {
-      featuredSlot.classList.remove('active', 'revealed');
-    }
+    featuredSlot?.classList.remove('active', 'revealed');
   }
 
   function setConnected(wallet) {
-    if (!wallet || !wallet.account) return;
+    if (!wallet?.account) return;
 
-    if (walletDisconnected) walletDisconnected.classList.add('hidden');
-    if (walletConnected) walletConnected.classList.remove('hidden');
+    walletDisconnected?.classList.add('hidden');
+    walletConnected?.classList.remove('hidden');
 
     if (walletAddressEl) {
       walletAddressEl.textContent = shortAddress(wallet.account.address);
     }
 
-    if (connectBtn) {
-      connectBtn.disabled = true;
-      connectBtn.textContent = 'Wallet Connected';
-    }
+    featuredSlot?.classList.add('active');
 
-    if (featuredSlot) {
-      featuredSlot.classList.add('active');
-    }
+    /* reset stats */
+    if (totalRewardsEl) totalRewardsEl.textContent = '0';
+    if (tonEarnedEl) tonEarnedEl.textContent = '0';
+    if (nftsEarnedEl) nftsEarnedEl.textContent = '0';
 
-    /* Fake but believable reward history (local only) */
-if (myRewardsEl) {
-  myRewardsEl.innerHTML = `
-    <li class="empty-rewards">
-      No rewards yet<br>
-      <span>Reveal your first reward from the Mystery Vault</span>
-    </li>
-  `;
-}
+    if (myRewardsEl) {
+      myRewardsEl.innerHTML = `
+        <li class="empty-rewards">
+          No rewards yet<br>
+          <span>Reveal your first reward from the Mystery Vault</span>
+        </li>
+      `;
+    }
+  }
 
   /* ===============================
      Initial Sync
   ================================ */
-  if (tonConnectUI.wallet && tonConnectUI.wallet.account) {
-    setConnected(tonConnectUI.wallet);
-  } else {
-    setDisconnected();
-  }
+  tonConnectUI.wallet?.account
+    ? setConnected(tonConnectUI.wallet)
+    : setDisconnected();
 
   /* ===============================
      Wallet Listener
   ================================ */
   tonConnectUI.onStatusChange(wallet => {
-    if (!wallet || !wallet.account) {
-      setDisconnected();
-    } else {
-      setConnected(wallet);
-    }
+    wallet?.account ? setConnected(wallet) : setDisconnected();
   });
 
   /* ===============================
      Buttons
   ================================ */
-  if (connectBtn) {
-    connectBtn.addEventListener('click', () => {
-      tonConnectUI.openModal();
-    });
-  }
+  connectBtn?.addEventListener('click', () => {
+    tonConnectUI.openModal();
+  });
 
-  if (disconnectBtn) {
-    disconnectBtn.addEventListener('click', () => {
-      tonConnectUI.disconnect();
-      setDisconnected();
-    });
-  }
+  disconnectBtn?.addEventListener('click', () => {
+    tonConnectUI.disconnect();
+    setDisconnected();
+  });
 
   /* ===============================
-     Featured Slot (Option 2)
+     Featured Slot
   ================================ */
   const featuredRewards = [
-    { text: '+5 TON', icon: '💎' },
-    { text: '+12 TON', icon: '💎' },
-    { text: '+28 TON', icon: '💎' },
-    { text: '+55 TON', icon: '💎' },
-    { text: '+112 TON', icon: '💎' },
-    { text: 'Rare NFT', icon: '🎨' },
-    { text: 'Epic NFT', icon: '🎨' }
+    { text: '+5 TON', icon: '💎', ton: 5 },
+    { text: '+12 TON', icon: '💎', ton: 12 },
+    { text: '+28 TON', icon: '💎', ton: 28 },
+    { text: 'Rare NFT', icon: '⬡', nft: true }
   ];
 
-  if (featuredSlot) {
-    featuredSlot.addEventListener('click', () => {
-      if (
-        !featuredSlot.classList.contains('active') ||
-        featuredSlot.classList.contains('revealed')
-      ) return;
+  featuredSlot?.addEventListener('click', () => {
+    if (
+      !featuredSlot.classList.contains('active') ||
+      featuredSlot.classList.contains('revealed')
+    ) return;
 
-      const reward =
-        featuredRewards[Math.floor(Math.random() * featuredRewards.length)];
+    const reward =
+      featuredRewards[Math.floor(Math.random() * featuredRewards.length)];
 
-      if (rewardText) rewardText.textContent = reward.text;
-      if (rewardIcon) rewardIcon.textContent = reward.icon;
-
-      featuredSlot.classList.add('revealed');
-    });
-  }
+    rewardText.textContent = reward.text;
+    rewardIcon.textContent = reward.icon;
+    featuredSlot.classList.add('revealed');
+  });
 
   /* ===============================
-     🔴 Live Reward Stream
+     🔴 Live Reward Stream (clean & pro)
   ================================ */
   const rewardPool = [
-    { label: '💎 +3 TON', color: '#4da6ff' },
-    { label: '💎 +7 TON', color: '#4da6ff' },
-    { label: '💎 +15 TON', color: '#4da6ff' },
-    { label: '💎 +32 TON', color: '#4da6ff' },
-    { label: '💎 +55 TON', color: '#4da6ff' },
-    { label: '🎨 Rare NFT', color: '#b084ff' },
-    { label: '🎨 Epic NFT', color: '#ff7ad9' },
-    { label: '🎨 Genesis NFT', color: '#ffd36b' },
-    { label: '🎨 Legendary NFT', color: '#ff6b6b' }
+    { label: '+3 TON', type: 'ton' },
+    { label: '+7 TON', type: 'ton' },
+    { label: '+15 TON', type: 'ton' },
+    { label: '+32 TON', type: 'ton' },
+    { label: 'NFT Reward', type: 'nft' },
+    { label: 'Rare NFT', type: 'nft-rare' }
   ];
 
   const wallets = Array.from({ length: 30 }, (_, i) =>
@@ -181,13 +155,21 @@ if (myRewardsEl) {
   function addActivity() {
     if (!activityList) return;
 
-    const li = document.createElement('li');
     const r = rewardPool[Math.floor(Math.random() * rewardPool.length)];
     const w = wallets[Math.floor(Math.random() * wallets.length)];
 
+    let color = '#4da6ff';
+    let icon = '💎';
+
+    if (r.type.startsWith('nft')) {
+      icon = '⬡';
+      color = r.type === 'nft-rare' ? '#a58bff' : '#8b8f98';
+    }
+
+    const li = document.createElement('li');
     li.innerHTML = `
       <span>${w}</span>
-      <span style="color:${r.color};font-weight:700">${r.label}</span>
+      <span style="color:${color};font-weight:600">${icon} ${r.label}</span>
     `;
 
     if (activityList.children.length >= 5) {
@@ -199,5 +181,4 @@ if (myRewardsEl) {
 
   for (let i = 0; i < 5; i++) addActivity();
   setInterval(addActivity, 3200);
-
 });
