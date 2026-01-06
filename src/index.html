@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TON Mystery Rewards</title>
 
+  <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,79 +15,108 @@
 </head>
 
 <body>
-<div class="app">
+  <div class="app">
 
-<header class="hero">
-  <span class="badge">LIVE REWARDS</span>
-  <h1>Unlock TON Mystery Boxes</h1>
-  <p class="subtitle">A live reward experience on TON blockchain.</p>
-</header>
+    <!-- HERO -->
+    <header class="hero">
+      <span class="badge">LIVE REWARDS</span>
+      <h1>Unlock TON Mystery Boxes</h1>
+      <p class="subtitle">
+        A live reward experience on TON blockchain.
+      </p>
+    </header>
 
-<div class="trust-row">
-  <span>🔒 Read-only wallet</span>
-  <span>⚡ On-chain verified</span>
-  <span>📊 Transparent rewards</span>
-</div>
+    <!-- TRUST -->
+    <div class="trust-row">
+      <span>🔒 Read-only wallet connection</span>
+      <span>⚡ Instant on-chain verification</span>
+      <span>📊 Transparent reward history</span>
+    </div>
 
-<div id="wallet-card" class="card">
+    <!-- WALLET -->
+    <div id="wallet-card" class="card">
 
-  <div id="wallet-disconnected">
-    <p class="wallet-desc">
-      Connect your wallet to reveal on-chain rewards.<br>
-      <span>No approvals · No custody · TON native</span>
-    </p>
-    <button id="connect-btn">Connect TON Wallet</button>
-  </div>
+      <!-- DISCONNECTED -->
+      <div id="wallet-disconnected">
+        <p class="wallet-desc">
+          Connect your wallet to reveal on-chain rewards.<br>
+          <span>No approvals · No custody · TON native</span>
+        </p>
+        <button id="connect-btn">Connect TON Wallet</button>
+      </div>
 
-  <div id="wallet-connected" class="hidden">
+      <!-- CONNECTED -->
+      <div id="wallet-connected" class="hidden">
 
-    <div class="profile-header">
-      <div class="avatar"></div>
-      <div>
-        <div id="wallet-address" class="wallet-address"></div>
-        <div class="wallet-status">Connected to TON Network</div>
+        <div class="profile-header">
+          <div class="avatar"></div>
+          <div>
+            <div id="wallet-address" class="wallet-address"></div>
+            <div class="wallet-status">Connected to TON Network</div>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div>
+            <strong id="total-rewards">0</strong>
+            <span>Total Rewards</span>
+          </div>
+          <div>
+            <strong id="ton-earned">0</strong>
+            <span>TON Earned</span>
+          </div>
+          <div>
+            <strong id="nfts-earned">0</strong>
+            <span>NFTs</span>
+          </div>
+        </div>
+
+        <div class="wallet-rewards">
+          <span class="reward-title">My Rewards</span>
+          <ul id="my-rewards"></ul>
+        </div>
+
+        <button id="disconnect-btn" class="ghost">Disconnect</button>
+      </div>
+
+    </div>
+
+    <!-- FEATURED REWARD -->
+    <div class="featured-slot locked" id="featured-slot">
+      <div class="slot-inner">
+        <div class="slot-front">
+          <span class="pulse-ring"></span>
+          <span class="slot-title">Mystery Vault</span>
+          <span class="slot-sub">Tap to reveal reward</span>
+        </div>
+
+        <div class="slot-back">
+          <span class="reward-icon" id="reward-icon">💎</span>
+          <span class="reward-text" id="reward-text">+10 TON</span>
+          <span class="reward-sub">Reward Unlocked</span>
+        </div>
       </div>
     </div>
 
-    <div class="profile-stats">
-      <div><strong id="total-rewards">0</strong><span>Total Rewards</span></div>
-      <div><strong id="ton-earned">0</strong><span>TON Earned</span></div>
-      <div><strong id="nfts-earned">0</strong><span>NFTs</span></div>
+    <!-- ACTIVITY -->
+    <section class="activity">
+      <div class="activity-header">
+        🔴 Live Reward Stream
+      </div>
+      <ul class="activity-list"></ul>
+      <small>Updated in real time</small>
+    </section>
+
+    <!-- REWARD POPUP -->
+    <div id="reward-popup" class="reward hidden">
+      <h2 id="reward-title">Congratulations!</h2>
+      <div id="reward-amount" class="reward-amount">+10 TON</div>
+      <div id="reward-icon-popup" class="reward-icon">💎</div>
+      <button id="claim-reward">Claim Reward</button>
     </div>
 
-    <div class="wallet-rewards">
-      <span class="reward-title">My Rewards</span>
-      <ul id="my-rewards"></ul>
-    </div>
-
-    <button id="disconnect-btn" class="ghost">Disconnect</button>
   </div>
 
-</div>
-
-<div class="featured-slot locked" id="featured-slot">
-  <div class="slot-inner">
-    <div class="slot-front">
-      <span class="pulse-ring"></span>
-      <span class="slot-title">Mystery Vault</span>
-      <span class="slot-sub">Tap to reveal reward</span>
-    </div>
-    <div class="slot-back">
-      <span id="reward-icon">💎</span>
-      <span id="reward-text">+10 TON</span>
-      <span class="reward-sub">Reward Unlocked</span>
-    </div>
-  </div>
-</div>
-
-<section class="activity">
-  <div class="activity-header">🔴 Live Reward Stream</div>
-  <ul class="activity-list"></ul>
-  <small>Updated in real time</small>
-</section>
-
-</div>
-
-<script type="module" src="./main.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
