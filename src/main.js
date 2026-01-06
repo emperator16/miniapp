@@ -2,33 +2,15 @@ import { TonConnectUI } from '@tonconnect/ui';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ===============================
-     Telegram WebApp
-  ================================ */
-  const tg = window.Telegram?.WebApp || null;
-  if (tg) tg.expand();
-
-  /* ===============================
-     TonConnect Init
-  ================================ */
-  const tonConnectUI = new TonConnectUI({
-    manifestUrl: 'https://emperator16.github.io/miniapp/tonconnect-manifest.json'
-  });
+  const tg = window.Telegram?.WebApp; tg?.expand();
+  const tonConnectUI = new TonConnectUI({ manifestUrl:'https://emperator16.github.io/miniapp/tonconnect-manifest.json' });
   tonConnectUI.uiOptions = { language: 'en' };
 
-  /* ===============================
-     DOM Elements
-  ================================ */
   const connectBtn = document.getElementById('connect-btn');
   const disconnectBtn = document.getElementById('disconnect-btn');
-
   const walletDisconnected = document.getElementById('wallet-disconnected');
   const walletConnected = document.getElementById('wallet-connected');
   const walletAddressEl = document.getElementById('wallet-address');
-
-  const totalRewardsEl = document.getElementById('total-rewards');
-  const tonEarnedEl = document.getElementById('ton-earned');
-  const nftsEarnedEl = document.getElementById('nfts-earned');
   const myRewardsEl = document.getElementById('my-rewards');
 
   const featuredSlot = document.getElementById('featured-slot');
@@ -36,150 +18,109 @@ document.addEventListener('DOMContentLoaded', () => {
   const rewardIcon = document.getElementById('reward-icon');
 
   const activityList = document.querySelector('.activity-list');
+  const rewardPopup = document.getElementById('reward-popup');
+  const rewardAmount = document.getElementById('reward-amount');
+  const rewardIconPopup = document.getElementById('reward-icon-popup');
+  const claimRewardBtn = document.getElementById('claim-reward');
 
-  /* ===============================
-     Helpers
-  ================================ */
-  function shortAddress(addr) {
-    if (!addr) return '';
-    return addr.slice(0, 6) + '…' + addr.slice(-4);
-  }
+  function shortAddress(addr) { return addr ? addr.slice(0,4)+'…'+addr.slice(-4):''; }
 
-  /* ===============================
-     UI States
-  ================================ */
   function setDisconnected() {
-    walletDisconnected?.classList.remove('hidden');
-    walletConnected?.classList.add('hidden');
-
-    connectBtn && (connectBtn.disabled = false);
-
-    featuredSlot?.classList.remove('active', 'revealed');
+    walletDisconnected.classList.remove('hidden');
+    walletConnected.classList.add('hidden');
+    connectBtn.disabled = false;
+    connectBtn.textContent = 'Connect TON Wallet';
+    featuredSlot.classList.remove('active','revealed');
   }
 
   function setConnected(wallet) {
-    if (!wallet?.account) return;
+    if(!wallet?.account) return;
+    walletDisconnected.classList.add('hidden');
+    walletConnected.classList.remove('hidden');
+    walletAddressEl.textContent = shortAddress(wallet.account.address);
+    connectBtn.disabled = true;
+    connectBtn.textContent = 'Wallet Connected';
+    featuredSlot.classList.add('active');
 
-    walletDisconnected?.classList.add('hidden');
-    walletConnected?.classList.remove('hidden');
-
-    if (walletAddressEl) {
-      walletAddressEl.textContent = shortAddress(wallet.account.address);
-    }
-
-    featuredSlot?.classList.add('active');
-
-    /* reset stats */
-    if (totalRewardsEl) totalRewardsEl.textContent = '0';
-    if (tonEarnedEl) tonEarnedEl.textContent = '0';
-    if (nftsEarnedEl) nftsEarnedEl.textContent = '0';
-
-    if (myRewardsEl) {
-      myRewardsEl.innerHTML = `
-        <li class="empty-rewards">
-          No rewards yet<br>
-          <span>Reveal your first reward from the Mystery Vault</span>
-        </li>
-      `;
-    }
+    // initial reward history
+    myRewardsEl.innerHTML = `<li class="empty-rewards">No rewards yet<br><span>Reveal your first reward from the Mystery Vault</span></li>`;
+    document.getElementById('total-rewards').textContent = '0';
+    document.getElementById('ton-earned').textContent = '0';
+    document.getElementById('nfts-earned').textContent = '0';
   }
 
-  /* ===============================
-     Initial Sync
-  ================================ */
-  tonConnectUI.wallet?.account
-    ? setConnected(tonConnectUI.wallet)
-    : setDisconnected();
+  if(tonConnectUI.wallet?.account) setConnected(tonConnectUI.wallet);
+  else setDisconnected();
+  tonConnectUI.onStatusChange(w => !w?.account ? setDisconnected() : setConnected(w));
 
-  /* ===============================
-     Wallet Listener
-  ================================ */
-  tonConnectUI.onStatusChange(wallet => {
-    wallet?.account ? setConnected(wallet) : setDisconnected();
-  });
+  connectBtn.addEventListener('click',()=>tonConnectUI.openModal());
+  disconnectBtn.addEventListener('click',()=>{tonConnectUI.disconnect(); setDisconnected();});
 
-  /* ===============================
-     Buttons
-  ================================ */
-  connectBtn?.addEventListener('click', () => {
-    tonConnectUI.openModal();
-  });
-
-  disconnectBtn?.addEventListener('click', () => {
-    tonConnectUI.disconnect();
-    setDisconnected();
-  });
-
-  /* ===============================
-     Featured Slot
-  ================================ */
   const featuredRewards = [
-    { text: '+5 TON', icon: '💎', ton: 5 },
-    { text: '+12 TON', icon: '💎', ton: 12 },
-    { text: '+28 TON', icon: '💎', ton: 28 },
-    { text: 'Rare NFT', icon: '⬡', nft: true }
+    { text: '+5 TON', icon:'💎' },
+    { text: '+12 TON', icon:'💎' },
+    { text: '+28 TON', icon:'💎' },
+    { text: '+55 TON', icon:'💎' },
+    { text: '+112 TON', icon:'💎' },
+    { text: 'Rare NFT', icon:'🖼️' },
+    { text: 'Epic NFT', icon:'🖼️' }
   ];
 
-  featuredSlot?.addEventListener('click', () => {
-    if (
-      !featuredSlot.classList.contains('active') ||
-      featuredSlot.classList.contains('revealed')
-    ) return;
-
-    const reward =
-      featuredRewards[Math.floor(Math.random() * featuredRewards.length)];
-
-    rewardText.textContent = reward.text;
-    rewardIcon.textContent = reward.icon;
+  let currentReward = null;
+  featuredSlot.addEventListener('click',()=>{
+    if(!featuredSlot.classList.contains('active')||featuredSlot.classList.contains('revealed')) return;
+    currentReward = featuredRewards[Math.floor(Math.random()*featuredRewards.length)];
+    rewardText.textContent = currentReward.text;
+    rewardIcon.textContent = currentReward.icon;
     featuredSlot.classList.add('revealed');
+
+    rewardAmount.textContent = currentReward.text;
+    rewardIconPopup.textContent = currentReward.icon;
+    rewardPopup.classList.add('show');
   });
 
-  /* ===============================
-     🔴 Live Reward Stream (clean & pro)
-  ================================ */
-  const rewardPool = [
-    { label: '+3 TON', type: 'ton' },
-    { label: '+7 TON', type: 'ton' },
-    { label: '+15 TON', type: 'ton' },
-    { label: '+10 TON', type: 'ton' },
-    { label: '+32 TON', type: 'ton' },
-    { label: 'NFT Reward', type: 'nft' },
-    { label: 'NFT Reward', type: 'nft' }
-  ];
+  claimRewardBtn.addEventListener('click',()=>{
+    rewardPopup.classList.remove('show');
+    if(!currentReward) return;
 
-  const wallets = Array.from({ length: 30 }, (_, i) =>
-    `EQ${i}${Math.random().toString(36).slice(2, 6)}…${Math.random()
-      .toString(36)
-      .slice(-4)}`
-  );
-
-  function addActivity() {
-    if (!activityList) return;
-
-    const r = rewardPool[Math.floor(Math.random() * rewardPool.length)];
-    const w = wallets[Math.floor(Math.random() * wallets.length)];
-
-    let color = '#4da6ff';
-    let icon = '💎';
-
-    if (r.type.startsWith('nft')) {
-      icon = '⬡';
-      color = r.type === 'nft-rare' ? '#a58bff' : '#8b8f98';
-    }
-
+    // add to history
     const li = document.createElement('li');
-    li.innerHTML = `
-      <span>${w}</span>
-      <span style="color:${color};font-weight:600">${icon} ${r.label}</span>
-    `;
+    li.innerHTML = `<span>${currentReward.text}</span><span>✔</span>`;
+    if(myRewardsEl.querySelector('.empty-rewards')) myRewardsEl.innerHTML='';
+    myRewardsEl.appendChild(li);
 
-    if (activityList.children.length >= 5) {
-      activityList.removeChild(activityList.firstChild);
-    }
+    // update counters
+    const totalEl = document.getElementById('total-rewards');
+    const tonEl = document.getElementById('ton-earned');
+    const nftEl = document.getElementById('nfts-earned');
 
+    totalEl.textContent = parseInt(totalEl.textContent||'0')+1;
+    if(currentReward.text.includes('TON')) tonEl.textContent = parseInt(tonEl.textContent||'0') + parseInt(currentReward.text.replace(/\D/g,''));
+    if(currentReward.text.includes('NFT')) nftEl.textContent = parseInt(nftEl.textContent||'0') +1;
+  });
+
+  const rewardPool = [
+    { label:'💎 +3 TON', color:'#4da6ff' },
+    { label:'💎 +7 TON', color:'#4da6ff' },
+    { label:'💎 +15 TON', color:'#4da6ff' },
+    { label:'💎 +32 TON', color:'#4da6ff' },
+    { label:'💎 +55 TON', color:'#4da6ff' },
+    { label:'🖼️ Rare NFT', color:'#b084ff' },
+    { label:'🖼️ Epic NFT', color:'#ff7ad9' },
+    { label:'🖼️ Genesis NFT', color:'#ffd36b' },
+    { label:'🖼️ Legendary NFT', color:'#ff6b6b' }
+  ];
+  const wallets = Array.from({length:30},(_,i)=>`EQ${i}${Math.random().toString(36).slice(2,6)}…${Math.random().toString(36).slice(-4)}`);
+
+  function addActivity(){
+    const li = document.createElement('li');
+    const r = rewardPool[Math.floor(Math.random()*rewardPool.length)];
+    const w = wallets[Math.floor(Math.random()*wallets.length)];
+    li.innerHTML = `<span>${w}</span><span style="color:${r.color};font-weight:700">${r.label}</span>`;
+    if(activityList.children.length>=5) activityList.removeChild(activityList.firstChild);
     activityList.appendChild(li);
   }
+  for(let i=0;i<5;i++) addActivity();
+  setInterval(addActivity,3200);
 
-  for (let i = 0; i < 5; i++) addActivity();
-  setInterval(addActivity, 3200);
 });
