@@ -1,9 +1,6 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
   background: radial-gradient(1200px at 50% -20%, #1a2a3a, #050505);
   color: #fff;
@@ -12,362 +9,51 @@ body {
   justify-content: center;
 }
 
-.app {
-  width: 100%;
-  max-width: 420px;
-  padding: 22px;
-}
+.app { width: 100%; max-width: 420px; padding: 22px; }
 
 /* HERO */
-.hero {
-  text-align: center;
-  margin-bottom: 18px;
-}
-
-.badge {
-  display: inline-block;
-  padding: 6px 12px;
-  font-size: 0.65rem;
-  border-radius: 999px;
-  background: rgba(0,255,180,0.15);
-  color: #6bffd6;
-  letter-spacing: 0.08em;
-  margin-bottom: 10px;
-}
-
-.hero h1 {
-  font-size: 1.9rem;
-  font-weight: 800;
-  margin: 6px 0;
-}
-
-.subtitle {
-  font-size: 0.9rem;
-  opacity: 0.75;
-  line-height: 1.5;
-}
+.hero { text-align: center; margin-bottom: 18px; }
+.badge { display: inline-block; padding: 6px 12px; font-size: 0.65rem; border-radius: 999px; background: rgba(0,255,180,0.15); color: #6bffd6; letter-spacing: 0.08em; margin-bottom: 10px; }
+.hero h1 { font-size: 1.9rem; font-weight: 800; margin: 6px 0; }
+.subtitle { font-size: 0.9rem; opacity: 0.75; line-height: 1.5; }
 
 /* TRUST */
-.trust-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.75rem;
-  opacity: 0.65;
-  margin: 14px 0 20px;
-}
+.trust-row { display: flex; flex-direction: column; gap: 6px; font-size: 0.75rem; opacity: 0.65; margin: 14px 0 20px; }
 
 /* CARD */
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(14px);
-  border-radius: 18px;
-  padding: 18px;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+.card { background: rgba(255,255,255,0.05); backdrop-filter: blur(14px); border-radius: 18px; padding: 18px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.45); }
+#connect-btn, #claim-reward {
+  width: 100%; padding: 14px; border-radius: 14px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; background: linear-gradient(90deg,#00ffd5,#00b3ff); color: #000;
 }
+.ghost { margin-top: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 10px; border-radius: 12px; cursor: pointer; opacity: 0.7; }
+.ghost:hover { opacity: 1; }
+.hidden { display: none; }
 
-#connect-btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  background: linear-gradient(90deg,#00ffd5,#00b3ff);
-  color: #000;
-}
+/* WALLET PROFILE */
+.profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.avatar { width: 50px; height: 50px; border-radius: 50%; background: #6bffd6; }
+.profile-stats { display: flex; justify-content: space-between; margin-bottom: 12px; }
+.profile-stats div { text-align: center; }
 
-/* ACTIVITY */
-.activity {
-  background: rgba(255,255,255,0.04);
-  border-radius: 16px;
-  padding: 14px;
-}
+/* FEATURED VAULT */
+.featured-slot { margin: 24px 0; cursor: pointer; perspective: 1000px; }
+.slot-inner { position: relative; width: 100%; transform-style: preserve-3d; transition: transform 0.6s; }
+.featured-slot.revealed .slot-inner { transform: rotateY(180deg); }
+.slot-front, .slot-back { position: absolute; width: 100%; backface-visibility: hidden; padding: 24px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.slot-front { background: rgba(255,255,255,0.05); }
+.slot-back { background: rgba(0,255,180,0.15); transform: rotateY(180deg); }
 
-.activity-header {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  margin-bottom: 10px;
-}
+/* LIVE ACTIVITY */
+.activity { background: rgba(255,255,255,0.04); border-radius: 16px; padding: 14px; margin-top: 18px; }
+.activity-list li { display: flex; justify-content: space-between; font-family: monospace; font-size: 0.8rem; padding: 6px 0; animation: fadeIn .3s ease; }
+@keyframes fadeIn { from {opacity:0; transform: translateY(6px)} to {opacity:1} }
 
-.activity-list li {
-  display: flex;
-  justify-content: space-between;
-  font-family: monospace;
-  font-size: 0.8rem;
-  padding: 6px 0;
-  animation: fadeIn .3s ease;
-}
-
-@keyframes fadeIn {
-  from {opacity:0; transform: translateY(6px)}
-  to {opacity:1}
-}
-
-/* REWARD */
+/* REWARD POPUP */
 .reward {
-  margin-top: 20px;
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(0,0,0,0.7);
-  text-align: center;
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+  background: rgba(0,0,0,0.85); color: #fff; border-radius: 18px; padding: 24px; text-align: center; z-index: 100;
+  opacity: 0; transition: all 0.3s ease;
 }
-
-.hidden { display: none }
-
-.ghost {
-  margin-top: 10px;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #fff;
-  padding: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  opacity: 0.7;
-}
-
-.ghost:hover {
-  opacity: 1;
-}
-
-.hidden {
-  display: none;
-}
-
-/* =========================
-   Reward Slots (Modern)
-========================= */
-.slots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 24px 0;
-}
-
-.slot {
-  background: rgba(255,255,255,0.05);
-  border-radius: 16px;
-  padding: 14px 10px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  opacity: 0.35;
-  pointer-events: none;
-  transition: all .25s ease;
-}
-
-.slot.active {
-  opacity: 1;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.slot:hover {
-  transform: translateY(-2px);
-}
-
-.slot-label {
-  display: block;
-  font-size: 0.7rem;
-  opacity: 0.6;
-  margin-bottom: 6px;
-}
-
-.slot-type {
-  display: block;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.slot-status {
-  display: block;
-  margin-top: 10px;
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  opacity: 0.5;
-}
-
-.slot.active .slot-status {
-  color: #6bffd6;
-  opacity: 1;
-}
-
-/* =========================
-   Featured Lucky Slot
-========================= */
-
-.featured-slot {
-  margin: 26px 0;
-  height: 180px;
-  perspective: 1200px;
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.featured-slot.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.slot-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.9s cubic-bezier(.25,.8,.25,1);
-}
-
-.featured-slot.revealed .slot-inner {
-  transform: rotateY(180deg) scale(1.03);
-}
-
-.slot-front,
-.slot-back {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  border-radius: 22px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(14px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.slot-back {
-  transform: rotateY(180deg);
-}
-
-.slot-title {
-  font-weight: 800;
-  font-size: 1.1rem;
-}
-
-.slot-sub {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  margin-top: 6px;
-}
-
-.pulse-ring {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 2px solid rgba(0,255,200,0.4);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(.9); opacity:.7 }
-  70% { transform: scale(1.2); opacity:0 }
-  100% { opacity:0 }
-}
-
-.reward-icon {
-  font-size: 2.4rem;
-}
-
-.reward-text {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-top: 8px;
-}
-
-.reward-sub {
-  font-size: 0.7rem;
-  opacity: 0.6;
-}
-
-.wallet-desc {
-  font-size: 0.85rem;
-  opacity: 0.75;
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-
-.wallet-desc span {
-  font-size: 0.7rem;
-  opacity: 0.6;
-}
-
-.wallet-info {
-  margin-bottom: 14px;
-}
-
-.wallet-label {
-  display: block;
-  font-size: 0.65rem;
-  opacity: 0.5;
-}
-
-.wallet-address {
-  font-family: monospace;
-  font-size: 0.85rem;
-  word-break: break-all;
-}
-
-.wallet-rewards {
-  margin: 14px 0;
-  text-align: left;
-}
-
-.reward-title {
-  font-size: 0.7rem;
-  opacity: 0.6;
-  display: block;
-  margin-bottom: 6px;
-}
-
-#wallet-connected ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-#wallet-connected li {
-  font-size: 0.8rem;
-  padding: 4px 0;
-  display: flex;
-  justify-content: space-between;
-}
-
-.profile-header {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,#00ffd5,#00b3ff);
-}
-
-.wallet-address {
-  font-family: monospace;
-  font-size: 0.9rem;
-}
-
-.wallet-status {
-  font-size: 0.7rem;
-  opacity: 0.6;
-}
-
-.profile-stats {
-  display: flex;
-  justify-content: space-between;
-  margin: 14px 0;
-  text-align: center;
-}
-
-.profile-stats span {
-  font-size: 0.65rem;
-  opacity: 0.6;
-}
+.reward.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.reward-amount { font-size: 2rem; margin: 12px 0; font-weight: 700; }
+.reward-icon { font-size: 3rem; margin-bottom: 12px; }
