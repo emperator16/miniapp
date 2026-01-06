@@ -36,6 +36,32 @@
 
 <!-- WALLET -->
 <div id="wallet-card" class="card">
+<div id="profile-card" class="card hidden">
+  <div class="profile-header">
+    <div class="avatar"></div>
+    <div>
+      <div id="wallet-address" class="wallet-address"></div>
+      <div class="wallet-status">Connected to TON Network</div>
+    </div>
+  </div>
+
+  <div class="profile-stats">
+    <div>
+      <strong id="total-rewards">0</strong>
+      <span>Total Rewards</span>
+    </div>
+    <div>
+      <strong id="ton-earned">0</strong>
+      <span>TON Earned</span>
+    </div>
+    <div>
+      <strong id="nfts-earned">0</strong>
+      <span>NFTs</span>
+    </div>
+  </div>
+
+  <button id="disconnect-btn" class="ghost">Disconnect</button>
+</div>
 
   <!-- DISCONNECTED -->
   <div id="wallet-disconnected">
@@ -104,6 +130,7 @@
   <script type="module" src="./main.js"></script>
 </body>
 </html>
+
 
 
 
