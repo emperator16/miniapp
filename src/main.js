@@ -5,9 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ===============================
      Telegram WebApp
   ================================ */
-  const tg = window.Telegram && window.Telegram.WebApp
-    ? window.Telegram.WebApp
-    : null;
+  const tg =
+    window.Telegram && window.Telegram.WebApp
+      ? window.Telegram.WebApp
+      : null;
   if (tg) tg.expand();
 
   /* ===============================
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
      Helpers
   ================================ */
   function shortAddress(addr) {
+    if (!addr) return '';
     return addr.slice(0, 4) + '…' + addr.slice(-4);
   }
 
@@ -61,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setConnected(wallet) {
+    if (!wallet || !wallet.account) return;
+
     if (walletDisconnected) walletDisconnected.classList.add('hidden');
     if (walletConnected) walletConnected.classList.remove('hidden');
 
@@ -77,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
       featuredSlot.classList.add('active');
     }
 
-    /* Fake but believable reward history */
+    /* Fake but believable reward history (local only) */
     if (myRewardsEl) {
       myRewardsEl.innerHTML = '';
       ['+5 TON', '+12 TON', 'Rare NFT'].forEach(r => {
