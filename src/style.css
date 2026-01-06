@@ -335,3 +335,39 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+.profile-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#00ffd5,#00b3ff);
+}
+
+.wallet-address {
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.wallet-status {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-between;
+  margin: 14px 0;
+  text-align: center;
+}
+
+.profile-stats span {
+  font-size: 0.65rem;
+  opacity: 0.6;
+}
